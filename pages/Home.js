@@ -1,8 +1,9 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useEffect, useState } from "react";
-import { FlatList, View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, View, Image, TouchableOpacity, StyleSheet, Text, Button } from "react-native";
 import { fire, storage } from '../firebase';
 import { onSnapshot, collection, addDoc } from "firebase/firestore";
+import * as ImagePicker from "expo-image-picker";
 
 
 export default function Home(){
@@ -29,7 +30,7 @@ async function uploadImage(uri, fileType){
 
     uploadTask.on(
         "state_changed",
-        (snapshot) => {
+        () => {
 
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
                 await saveRecord(fileType, downloadURL, new Date().toISOString());
@@ -52,10 +53,27 @@ async function saveRecord(fileType, url, createdAt){
     }
 }
 
+async function pickImage(){
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImg(result.assets[0].uri);
+      await uploadImage(result.assets[0].uri, "image")
+    }
+  };
+
 return (
     <View style={estilo.container} >
 
-        <Text>Minhas fotos Lindas</Text>
+
+        <Text style={estilo.titulo}>
+            Minhas fotos Lindas
+            </Text>
         <FlatList
         data={file}
         keyExtractor={(item)=>item.url}
@@ -76,6 +94,11 @@ return (
     numColumns={2}        
         />
 
+        <TouchableOpacity
+        onPress={pickImage}
+        style={estilo.imgpick}>
+            <Text style={estilo.button}>Images</Text>
+        </TouchableOpacity>
     </View>
 )
 
@@ -90,5 +113,19 @@ const estilo = StyleSheet.create({
     fotos: {
         width: 200,
         height: 200
+    },
+    titulo:{
+        fontSize: 35,
+        marginTop: 100
+    },
+    imgpick:{
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20
+    },
+    button: {
+        fontSize: 30,
+        marginTop: 50
     }
 })
