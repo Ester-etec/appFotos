@@ -71,7 +71,7 @@ export default function Home() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 8, height: '100%', width: '100%' }}>
                 <Text style={{ textAlign: 'center' }}>
-                    Arquivos Enviados
+                    Fotos
                 </Text>
                 <FlatList
                     data={files}
@@ -81,7 +81,7 @@ export default function Home() {
                             return (
                                 <Image
                                     source={{ uri: item.url }}
-                                    style={{ width: 350, height: 350, borderRadius: 20, margin: 5 }}
+                                    style={{ width: 250, height: 250, borderRadius: 20, margin: 5 }}
                                 />
                             );
                         }
@@ -91,7 +91,7 @@ export default function Home() {
                 />
                 <TouchableOpacity
                     onPress={pickImage}
-                    style={{ justifyContent: 'center', alignItems: 'center', borderRadius: 20, padding: 50, backgroundColor: 'lightblue', marginTop: 10 }}
+                    style={{ justifyContent: 'center', alignItems: 'center', borderRadius: 20, padding: 30, backgroundColor: '#473563', marginTop: 10}}
                 >
                     <Text>Selecionar Imagens</Text>
                 </TouchableOpacity>
